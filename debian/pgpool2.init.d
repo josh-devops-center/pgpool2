@@ -22,7 +22,7 @@ PREFIX_PGPOOL="/etc/pgpool2"
 PGUSER=postgres
 
 # Where is pgpool binary?
-PGPOOL="/usr/sbin/pgpool"
+PGPOOL="/usr/local/bin/pgpool"
 
 # pgpool logfile
 PGPOOLLOG="/var/log/pgpool/pgpool.log"
@@ -76,6 +76,12 @@ case $1 in
          echo -n "Starting pgPool-II: "
 
          PID_FILE_NAME=`grep pid_file_name ${PGPOOL_CONFIG_FILE} | cut -d\' -f2`
+
+         if ! [ -e /var/run/postgresql ]
+         then
+            mkdir -p /var/run/postgresql/
+            chown $PGUSER.$PGUSER /var/run/postgresql/
+         fi
 
          if ! [ -e $PID_FILE_NAME ]
          then
